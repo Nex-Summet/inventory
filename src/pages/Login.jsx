@@ -3,9 +3,10 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, ShoppingBag, ArrowRight, User, Mail, Lock } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+
 export default function LoginPage() {
   const navigate = useNavigate()
-const { setUser } = useAuth()
+  const { setUser } = useAuth()
   const [mode, setMode] = useState('login')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -14,18 +15,18 @@ const { setUser } = useAuth()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  // 🔥 Demo Fill
+  // Demo Fill — matches deployed backend users
   const fillDemo = (role) => {
     if (role === 'admin') {
-      setEmail('admin@clothstock.com')
-      setPassword('admin123')
+      setEmail('sumit@gmail.com')
+      setPassword('123')
     } else {
-      setEmail('manager@clothstock.com')
-      setPassword('manager123')
+      setEmail('vivek@gmail.com')
+      setPassword('123')
     }
   }
 
-  // 🔐 Handle Submit (API Connected)
+  // Handle Submit (API Connected)
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
@@ -43,7 +44,7 @@ const { setUser } = useAuth()
         return
       }
 
-      // 🔥 LOGIN API CALL
+      // LOGIN API CALL
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/api/auth/login`,
         {
@@ -57,20 +58,38 @@ const { setUser } = useAuth()
       )
 
       const data = await res.json()
+      console.log(data, 'login response')
 
       if (!res.ok) {
         setError(data.message || 'Login failed')
         setLoading(false)
         return
       }
-setUser(data) 
-      // ✅ Redirect
-      if (data.role === 'admin') {
+
+      // Robust role extraction — handles multiple backend response shapes
+      const extractedRole =
+        data.user?.role ||
+        data.role ||
+        data.data?.role ||
+        data.data?.user?.role ||
+        ''
+
+      const role = String(extractedRole).toLowerCase().trim()
+      const user = data.user || { email, role, name: email.split('@')[0] }
+
+      console.log('Extracted role:', role)
+      console.log('User object:', user)
+
+      setUser(user)
+
+      // Redirect
+      if (role === 'admin') {
+        console.log("ADMIN LOGIN SUCCESS")
         navigate('/admin')
-      } else if (data.role === 'manager') {
+      } else if (role === 'manager') {
         navigate('/manager')
       } else {
-        setError('Invalid role')
+        setError(`Invalid role: "${extractedRole}"`)
       }
 
     } catch (err) {
@@ -206,3 +225,4 @@ setUser(data)
     </div>
   )
 }
+
