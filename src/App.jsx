@@ -7,13 +7,22 @@ import AdminDashboard from './pages/AdminDashboard'
 import ManagerDashboard from './pages/ManagerDashboard'
 
 function ProtectedRoute({ children, requiredRole }) {
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0f0a1a] flex items-center justify-center">
+        <div className="w-10 h-10 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
+  }
 
   if (!user) {
     return <Navigate to="/login" replace />
   }
 
-  if (requiredRole && user.role !== requiredRole) {
+  const currentRole = String(user.role || '').toLowerCase().trim()
+  if (requiredRole && currentRole !== requiredRole) {
     return <Navigate to="/login" replace />
   }
 

@@ -7,7 +7,7 @@ import {
   XCircle, Search, X, ShoppingBag, BarChart3
 } from 'lucide-react'
 
-const API_BASE = "http://localhost:8000"
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000"
 const API = `${API_BASE}/api/products`
 
 // ---- Helpers ----
@@ -53,21 +53,13 @@ function StockBadge({ stock }) {
   )
 }
 
-// ---- API Helper — handles auth token from localStorage as fallback ----
+// ---- API Helper — JWT is in HTTP-only cookie, just send credentials ----
 async function apiFetch(url, options = {}) {
-  // Try to get token from localStorage (set during login)
-  const token = localStorage.getItem('authToken') || localStorage.getItem('token') || ''
-
-  const defaultHeaders = {
-    'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-  }
-
   const config = {
-    credentials: 'include',           // send cookies if present
+    credentials: 'include',
     ...options,
     headers: {
-      ...defaultHeaders,
+      'Content-Type': 'application/json',
       ...(options.headers || {}),
     },
   }

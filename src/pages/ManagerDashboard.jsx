@@ -49,12 +49,14 @@ export default function ManagerDashboard() {
   const [transactions, setTransactions] = useState([])
   const [invoice, setInvoice] = useState(null)
 
+  const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000"
+
   // FETCH PRODUCTS FROM API
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await fetch(
-          "https://api-inventory-management-kevv.onrender.com/api/products",
+          `${API_BASE}/api/products`,
           { credentials: "include" }
         )
         const result = await res.json()
@@ -123,7 +125,7 @@ export default function ManagerDashboard() {
 
     try {
       const res = await fetch(
-        `https://api-inventory-management-kevv.onrender.com/api/products/${product.id}`,
+        `${API_BASE}/api/products/${product.id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

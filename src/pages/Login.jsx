@@ -75,7 +75,14 @@ export default function LoginPage() {
         ''
 
       const role = String(extractedRole).toLowerCase().trim()
-      const user = data.user || { email, role, name: email.split('@')[0] }
+
+      // Build a normalized user object with guaranteed name & role
+      const user = {
+        ...(data.user || {}),
+        name: data.user?.name || data.name || email.split('@')[0],
+        email: data.user?.email || email,
+        role,
+      }
 
       console.log('Extracted role:', role)
       console.log('User object:', user)
