@@ -111,8 +111,8 @@ export default function LoginPage() {
     <div className="min-h-screen bg-[#0f0a1a] flex items-center justify-center p-4 relative overflow-hidden">
 
       {/* Background */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-900/30 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-violet-900/20 rounded-full blur-3xl" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96  bg-fuchsia-500/20 rounded-full blur-3xl" />
 
       <div className="w-full max-w-md relative z-10">
 
@@ -126,10 +126,10 @@ export default function LoginPage() {
         </div>
 
         {/* Card */}
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
+        <div className="bg-white/5 border border-white/10  p-8">
 
           {/* Toggle */}
-          <div className="flex bg-white/5 rounded-xl p-1 mb-6">
+          <div className="flex bg-white/5  p-1 mb-6">
             {['login', 'signup'].map(m => (
               <button
                 key={m}

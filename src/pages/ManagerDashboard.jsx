@@ -118,22 +118,18 @@ export default function ManagerDashboard() {
       return
     }
 
-    const newStock =
-      operation === 'IN'
-        ? product.stock + qty
-        : product.stock - qty
-
     try {
       const res = await fetch(
-        `${API_BASE}/api/products/${product.id}`,
+        `${API_BASE}/api/products/update`,
         {
-          method: "PUT",
+          method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
           body: JSON.stringify({
-            name: product.name,
-            price: product.price,
-            stock: newStock
+            productName: product.name,
+            operation,
+            quantity: qty,
+            note: note || ""
           })
         }
       )
@@ -145,10 +141,12 @@ export default function ManagerDashboard() {
         return
       }
 
+      const finalStock = data.data?.finalStock ?? product.stock
+
       // update UI
       setProducts(prev =>
         prev.map(p =>
-          p.id === product.id ? { ...p, stock: newStock } : p
+          p.id === product.id ? { ...p, stock: finalStock } : p
         )
       )
 
