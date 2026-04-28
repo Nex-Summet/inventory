@@ -130,7 +130,7 @@ export default function LoginPage() {
 
           {/* Toggle */}
           <div className="flex bg-white/5  p-1 mb-6">
-            {['login', 'signup'].map(m => (
+            {['login',].map(m => (
               <button
                 key={m}
                 onClick={() => { setMode(m); setError('') }}
